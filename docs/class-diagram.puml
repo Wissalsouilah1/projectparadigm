@@ -1,0 +1,75 @@
+@startuml
+title Class Diagram - TCP Chat
+package "tcp-server" {
+  package "chat.view" {
+    class TCPServer <<JavaFX Application>> {
+      - logArea: TextArea
+      - userList: ListView<String>
+      - userColors: Map<String,Color>
+      + start(Stage)
+      + stop()
+      + onLog(String)
+      + onUserListChanged(List<String>)
+    }
+  }
+  package "chat.model" {
+    interface ServerListener {
+      + onLog(String)
+      + onUserListChanged(List<String>)
+    }
+    class ChatServer {
+      - port: int
+      - clients: Map<Socket,DataOutputStream>
+      - usernames: Map<Socket,String>
+      + start()
+      + stop()
+      - handleClient(Socket)
+      - broadcast(String, Socket)
+      - sendToClient(Socket, String)
+      - getAllUsers(): String
+    }
+    class ServerConfig {
+      + getPort(): int
+    }
+  }
+}
+package "tcp-client" {
+  package "chat.view " {
+    class TCPClient <<JavaFX Application>> {
+      - chatArea: TextArea
+      - input: TextArea
+      - statusDot: Circle
+      - statusLabel: Label
+      + start(Stage)
+      + onMessage(String)
+      + onDisconnected(String)
+    }
+  }
+  package "chat.model " {
+    interface ClientListener {
+      + onMessage(String)
+      + onDisconnected(String)
+    }
+    class ChatClient {
+      - host: String
+      - port: int
+      + connect(String)
+      + send(String): boolean
+      + leave()
+    }
+    class ClientConfig {
+      + getHost(): String
+      + getPort(): int
+    }
+  }
+}
+TCPServer ..|> ServerListener
+TCPServer --> ChatServer : creates / starts
+TCPServer --> ServerConfig
+ChatServer --> ServerListener : notifies
+TCPClient ..|> ClientListener
+TCPClient --> ChatClient
+TCPClient --> ClientConfig
+ChatClient --> ClientListener : notifies
+ChatClient ..> ChatServer : TCP (writeUTF/readUTF)
+@enduml

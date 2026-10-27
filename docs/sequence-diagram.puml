@@ -1,0 +1,18 @@
+@startuml
+title Message flow
+actor Alice
+actor Bob
+participant "TCPServer\n(virtual thread per client)" as S
+Alice -> S : connect + writeUTF("alice")
+S --> Alice : "Welcome alice"
+Bob -> S : connect + writeUTF("bob")
+S --> Bob : "Welcome bob"
+S --> Alice : "[Server] bob joined the chat."
+Alice -> S : writeUTF("hello")
+S -> S : format "[time] alice: hello"
+S --> Bob : "[time] alice: hello"
+Bob -> S : writeUTF("allUsers")
+S --> Bob : "Active users: alice, bob"
+Alice -> S : writeUTF("bye")
+S --> Bob : "[Server] alice left the chat."
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+title Deployment Diagram - TCP Chat
+node "Client PC 1" {
+  artifact "tcp-client-1.0-shaded.jar" as C1
+}
+node "Client PC 2" {
+  artifact "tcp-client-1.0-shaded.jar" as C2
+}
+node "Client PC N" {
+  artifact "tcp-client-1.0-shaded.jar" as C3
+}
+node "Server machine" {
+  artifact "tcp-server-1.0-shaded.jar" as S
+  artifact "config.properties" as CFG
+  S ..> CFG
+}
+C1 -- S : TCP/IP (port from config.properties)
+C2 -- S : TCP/IP
+C3 -- S : TCP/IP
+@enduml
