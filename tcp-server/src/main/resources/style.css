@@ -1,0 +1,4 @@
+.root { -fx-font-family: "Segoe UI", sans-serif; -fx-background-color: #f4f6fb; }
+.title { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e75; }
+#logArea { -fx-font-family: "Consolas", monospace; }
+.list-cell { -fx-padding: 6 10; -fx-font-size: 13px; }
